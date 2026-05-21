@@ -1,0 +1,15 @@
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\Main.java
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\database\DataManager.java
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\database\DataStore.java
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\model\Admin.java
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\model\Equipment.java
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\model\Pracownik.java
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\model\Reservation.java
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\model\Role.java
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\model\Room.java
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\model\Student.java
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\model\User.java
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\reservations\Schedule.java
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\resources\ResourceManager.java
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\ui\ConsoleMenu.java
+C:\Users\meneluer\Downloads\CampusReserve-mateusz\src\campusreserve\users\UserManager.java
