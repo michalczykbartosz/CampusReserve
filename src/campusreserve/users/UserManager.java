@@ -89,6 +89,11 @@ public class UserManager
         getUserByUUID(userId).setActive(false);
     }
 
+    public void activateUser(UUID userId)
+    {
+        getUserByUUID(userId).setActive(true);
+    }
+
     private String hashPassword(String password)
     {
         try

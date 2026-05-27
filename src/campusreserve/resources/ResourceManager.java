@@ -62,6 +62,22 @@ public class ResourceManager
         this.database.getEquipmentList().add(equipment);
     }
 
+    public ArrayList<Equipment> getEquipmentForRoom(UUID roomId)
+    {
+        ArrayList<Equipment> equipmentList = this.database.getEquipmentList();
+        ArrayList<Equipment> roomEquipment = new ArrayList<>();
+
+        for (Equipment equipment : equipmentList)
+        {
+            if (equipment.getRoomIdOwning() != null && equipment.getRoomIdOwning().equals(roomId))
+            {
+                roomEquipment.add(equipment);
+            }
+        }
+
+        return roomEquipment;
+    }
+
     public Equipment getEquipmentByName(String equipmentName)
     {
         ArrayList<Equipment> equipmentList = this.database.getEquipmentList();
