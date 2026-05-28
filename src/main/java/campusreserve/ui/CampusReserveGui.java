@@ -33,6 +33,7 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -537,8 +538,7 @@ public class CampusReserveGui
         form.add(new JLabel("Sala:"), gc);
         gc.gridx = 1;
         reservationRoomCombo = new JComboBox<>(reservationRoomModel);
-        reservationRoomCombo.setRenderer(new RoomRenderer());
-        reservationRoomCombo.setBorder(BorderFactory.createLineBorder(themeBorder()));
+        applyComboBoxTheme(reservationRoomCombo, new RoomRenderer());
         bindAction(reservationRoomCombo, this::refreshReservationList);
         form.add(reservationRoomCombo, gc);
 
@@ -673,7 +673,7 @@ public class CampusReserveGui
         JTextField emailField = new JTextField(20);
         JPasswordField passwordField = new JPasswordField(20);
         JComboBox<String> roleBox = new JComboBox<>(new String[]{"Student", "Pracownik"});
-        roleBox.setBorder(BorderFactory.createLineBorder(themeBorder()));
+        applyComboBoxTheme(roleBox, null);
         JTextField extraField = new JTextField(20);
         JLabel extraLabel = new JLabel("Numer albumu:");
 
@@ -1135,6 +1135,47 @@ public class CampusReserveGui
                 action.run();
             }
         });
+    }
+
+    private void applyComboBoxTheme(JComboBox<?> comboBox, ListCellRenderer<?> renderer)
+    {
+        comboBox.setBackground(themeCard());
+        comboBox.setForeground(themeText());
+        comboBox.setBorder(BorderFactory.createLineBorder(themeBorder()));
+        comboBox.setUI(new PremiumComboBoxUI());
+
+        if (renderer != null)
+        {
+            comboBox.setRenderer((ListCellRenderer) renderer);
+        }
+        else
+        {
+            comboBox.setRenderer((list, value, index, isSelected, cellHasFocus) -> {
+                JLabel label = new JLabel(value == null ? "" : value.toString());
+                label.setOpaque(true);
+                label.setBackground(isSelected ? (darkMode ? new Color(45, 52, 62) : new Color(214, 226, 238)) : themeCard());
+                label.setForeground(themeText());
+                label.setBorder(new EmptyBorder(2, 6, 2, 6));
+                return label;
+            });
+        }
+    }
+
+    private class PremiumComboBoxUI extends BasicComboBoxUI
+    {
+        @Override
+        protected JButton createArrowButton()
+        {
+            JButton button = new JButton("\u25BE");
+            button.setBackground(themeCard());
+            button.setForeground(themeText());
+            button.setBorder(BorderFactory.createLineBorder(themeBorder()));
+            button.setFocusPainted(false);
+            button.setFocusable(false);
+            button.setContentAreaFilled(true);
+            button.setRolloverEnabled(false);
+            return button;
+        }
     }
 
     private void stylePrimaryButton(javax.swing.AbstractButton button)

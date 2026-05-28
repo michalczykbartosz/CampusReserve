@@ -27,3 +27,6 @@ replay_pid*
 
 out/
 users.txt
+sources.txt
+pom.xml
+target/

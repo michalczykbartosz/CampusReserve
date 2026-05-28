@@ -7,15 +7,13 @@ Aplikacja Java do rezerwacji sal i zasobów uczelni.
 ### GUI (domyślnie)
 ```powershell
 Set-Location 'C:\Users\bart3\Desktop\JAVA\CampusReserve'
-$files = Get-ChildItem -Path 'src' -Recurse -Filter '*.java' | ForEach-Object { $_.FullName }
-New-Item -ItemType Directory -Force -Path 'out' | Out-Null
-javac -d out $files
-java -cp out campusreserve.Main
+mvn -DskipTests compile
+java -cp target/classes campusreserve.Main
 ```
 
 ### Tryb konsolowy
 ```powershell
-java -cp out campusreserve.Main --console
+java -cp target/classes campusreserve.Main --console
 ```
 
 ## Dane testowe
@@ -30,3 +28,9 @@ Jeśli plik `users.txt` nie istnieje, aplikacja tworzy domyślne konto administr
 - GUI korzysta z istniejącej logiki `UserManager`, `ResourceManager` i `Schedule`.
 - Aplikacja zapisuje użytkowników do pliku `users.txt` przy zamknięciu okna lub wylogowaniu w trybie konsolowym.
 
+## Testy (JUnit 5)
+
+```powershell
+Set-Location 'C:\Users\bart3\Desktop\JAVA\CampusReserve'
+mvn test
+```
