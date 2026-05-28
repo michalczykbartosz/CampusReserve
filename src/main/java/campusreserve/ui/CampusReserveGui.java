@@ -172,6 +172,15 @@ public class CampusReserveGui
         UIManager.put("Label.font", new Font("SansSerif", Font.PLAIN, 13));
         UIManager.put("Label.foreground", themeText());
         UIManager.put("Button.font", new Font("SansSerif", Font.BOLD, 13));
+        UIManager.put("Button.background", themeCard());
+        UIManager.put("Button.foreground", themeText());
+        UIManager.put("Button.focus", themeBorder());
+        UIManager.put("Button.shadow", themeBorder());
+        UIManager.put("Button.darkShadow", themeBorder());
+        UIManager.put("Button.highlight", themeCard());
+        UIManager.put("Button.border", BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(themeBorder()),
+                new EmptyBorder(6, 14, 6, 14)));
         UIManager.put("TextField.font", new Font("SansSerif", Font.PLAIN, 13));
         UIManager.put("TextField.background", themeCard());
         UIManager.put("TextField.foreground", themeText());
@@ -198,6 +207,17 @@ public class CampusReserveGui
         UIManager.put("TabbedPane.focus", themeBorder());
         UIManager.put("TabbedPane.highlight", themeBorder());
         UIManager.put("TabbedPane.shadow", themeBorder());
+        UIManager.put("OptionPane.background", themeCard());
+        UIManager.put("OptionPane.foreground", themeText());
+        UIManager.put("OptionPane.messageForeground", themeText());
+        UIManager.put("OptionPane.buttonBackground", themeCard());
+        UIManager.put("OptionPane.buttonForeground", themeText());
+        UIManager.put("OptionPane.buttonFocus", themeBorder());
+        UIManager.put("OptionPane.border", BorderFactory.createEmptyBorder(12, 12, 12, 12));
+        UIManager.put("OptionPane.messageAreaBorder", BorderFactory.createEmptyBorder(12, 12, 8, 12));
+        UIManager.put("OptionPane.buttonAreaBorder", BorderFactory.createEmptyBorder(0, 12, 12, 12));
+        UIManager.put("RootPane.background", themeBackground());
+        UIManager.put("Dialog.background", themeCard());
     }
 
     private Color themeBackground()
@@ -645,7 +665,7 @@ public class CampusReserveGui
 
             if (user == null)
             {
-                JOptionPane.showMessageDialog(frame, "Nieprawidłowy email lub hasło.", "Logowanie", JOptionPane.WARNING_MESSAGE);
+                showStyledMessageDialog(frame, "Nieprawidłowy email lub hasło.", "Logowanie", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
@@ -656,11 +676,11 @@ public class CampusReserveGui
         }
         catch (IllegalArgumentException ex)
         {
-            JOptionPane.showMessageDialog(frame, ex.getMessage(), "Logowanie", JOptionPane.ERROR_MESSAGE);
+            showStyledMessageDialog(frame, ex.getMessage(), "Logowanie", JOptionPane.ERROR_MESSAGE);
         }
         catch (Exception ex)
         {
-            JOptionPane.showMessageDialog(frame, "Nie udało się zalogować: " + ex.getMessage(), "Logowanie", JOptionPane.ERROR_MESSAGE);
+            showStyledMessageDialog(frame, "Nie udało się zalogować: " + ex.getMessage(), "Logowanie", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -718,7 +738,7 @@ public class CampusReserveGui
 
             if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() || extra.isEmpty())
             {
-                JOptionPane.showMessageDialog(dialog, "Wypełnij wszystkie pola.", "Rejestracja", JOptionPane.WARNING_MESSAGE);
+                showStyledMessageDialog(dialog, "Wypełnij wszystkie pola.", "Rejestracja", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
@@ -734,16 +754,16 @@ public class CampusReserveGui
                 }
 
                 persistUsers();
-                JOptionPane.showMessageDialog(dialog, "Konto zostało utworzone. Możesz się zalogować.", "Rejestracja", JOptionPane.INFORMATION_MESSAGE);
+                showStyledMessageDialog(dialog, "Konto zostało utworzone. Możesz się zalogować.", "Rejestracja", JOptionPane.INFORMATION_MESSAGE);
                 dialog.dispose();
             }
             catch (IllegalArgumentException ex)
             {
-                JOptionPane.showMessageDialog(dialog, ex.getMessage(), "Rejestracja", JOptionPane.ERROR_MESSAGE);
+                showStyledMessageDialog(dialog, ex.getMessage(), "Rejestracja", JOptionPane.ERROR_MESSAGE);
             }
             catch (Exception ex)
             {
-                JOptionPane.showMessageDialog(dialog, "Nie udało się zarejestrować: " + ex.getMessage(), "Rejestracja", JOptionPane.ERROR_MESSAGE);
+                showStyledMessageDialog(dialog, "Nie udało się zarejestrować: " + ex.getMessage(), "Rejestracja", JOptionPane.ERROR_MESSAGE);
             }
         });
         stylePrimaryButton(saveButton);
@@ -941,14 +961,14 @@ public class CampusReserveGui
     {
         if (loggedInUser == null)
         {
-            JOptionPane.showMessageDialog(frame, "Najpierw zaloguj się do systemu.", "Rezerwacja", JOptionPane.WARNING_MESSAGE);
+            showStyledMessageDialog(frame, "Najpierw zaloguj się do systemu.", "Rezerwacja", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         Room selectedRoom = (Room) reservationRoomCombo.getSelectedItem();
         if (selectedRoom == null)
         {
-            JOptionPane.showMessageDialog(frame, "Wybierz salę.", "Rezerwacja", JOptionPane.WARNING_MESSAGE);
+            showStyledMessageDialog(frame, "Wybierz salę.", "Rezerwacja", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -958,20 +978,20 @@ public class CampusReserveGui
             LocalDateTime end = LocalDateTime.parse(endField.getText().trim(), DATE_FORMAT);
             Reservation reservation = new Reservation(loggedInUser.getUserId(), selectedRoom.getRoomId(), start, end);
             schedule.addReservation(reservation);
-            JOptionPane.showMessageDialog(frame, "Rezerwacja została dodana.", "Rezerwacja", JOptionPane.INFORMATION_MESSAGE);
+            showStyledMessageDialog(frame, "Rezerwacja została dodana.", "Rezerwacja", JOptionPane.INFORMATION_MESSAGE);
             refreshReservationList();
         }
         catch (DateTimeParseException ex)
         {
-            JOptionPane.showMessageDialog(frame, "Nieprawidłowy format daty. Użyj: yyyy-MM-dd HH:mm", "Rezerwacja", JOptionPane.ERROR_MESSAGE);
+            showStyledMessageDialog(frame, "Nieprawidłowy format daty. Użyj: yyyy-MM-dd HH:mm", "Rezerwacja", JOptionPane.ERROR_MESSAGE);
         }
         catch (IllegalArgumentException | IllegalStateException ex)
         {
-            JOptionPane.showMessageDialog(frame, ex.getMessage(), "Rezerwacja", JOptionPane.ERROR_MESSAGE);
+            showStyledMessageDialog(frame, ex.getMessage(), "Rezerwacja", JOptionPane.ERROR_MESSAGE);
         }
         catch (Exception ex)
         {
-            JOptionPane.showMessageDialog(frame, "Nie udało się utworzyć rezerwacji: " + ex.getMessage(), "Rezerwacja", JOptionPane.ERROR_MESSAGE);
+            showStyledMessageDialog(frame, "Nie udało się utworzyć rezerwacji: " + ex.getMessage(), "Rezerwacja", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -980,19 +1000,19 @@ public class CampusReserveGui
         Reservation selected = reservationList.getSelectedValue();
         if (selected == null)
         {
-            JOptionPane.showMessageDialog(frame, "Wybierz rezerwację z listy.", "Anulowanie", JOptionPane.WARNING_MESSAGE);
+            showStyledMessageDialog(frame, "Wybierz rezerwację z listy.", "Anulowanie", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         try
         {
             schedule.cancelReservation(selected.getReservationId());
-            JOptionPane.showMessageDialog(frame, "Rezerwacja została anulowana.", "Anulowanie", JOptionPane.INFORMATION_MESSAGE);
+            showStyledMessageDialog(frame, "Rezerwacja została anulowana.", "Anulowanie", JOptionPane.INFORMATION_MESSAGE);
             refreshReservationList();
         }
         catch (IllegalArgumentException ex)
         {
-            JOptionPane.showMessageDialog(frame, ex.getMessage(), "Anulowanie", JOptionPane.ERROR_MESSAGE);
+            showStyledMessageDialog(frame, ex.getMessage(), "Anulowanie", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -1014,20 +1034,20 @@ public class CampusReserveGui
     {
         if (loggedInUser == null || loggedInUser.getRole() != Role.ADMIN)
         {
-            JOptionPane.showMessageDialog(frame, "Tylko administrator ma dostęp do tej funkcji.", "Użytkownicy", JOptionPane.WARNING_MESSAGE);
+            showStyledMessageDialog(frame, "Tylko administrator ma dostęp do tej funkcji.", "Użytkownicy", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         User selected = userList.getSelectedValue();
         if (selected == null)
         {
-            JOptionPane.showMessageDialog(frame, "Wybierz użytkownika z listy.", "Użytkownicy", JOptionPane.WARNING_MESSAGE);
+            showStyledMessageDialog(frame, "Wybierz użytkownika z listy.", "Użytkownicy", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         if (selected.getUserId().equals(loggedInUser.getUserId()))
         {
-            JOptionPane.showMessageDialog(frame, "Nie możesz dezaktywować własnego konta.", "Użytkownicy", JOptionPane.WARNING_MESSAGE);
+            showStyledMessageDialog(frame, "Nie możesz dezaktywować własnego konta.", "Użytkownicy", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -1036,11 +1056,11 @@ public class CampusReserveGui
             userManager.deactivateUser(selected.getUserId());
             persistUsers();
             refreshUsers();
-            JOptionPane.showMessageDialog(frame, "Użytkownik został dezaktywowany.", "Użytkownicy", JOptionPane.INFORMATION_MESSAGE);
+            showStyledMessageDialog(frame, "Użytkownik został dezaktywowany.", "Użytkownicy", JOptionPane.INFORMATION_MESSAGE);
         }
         catch (IllegalArgumentException ex)
         {
-            JOptionPane.showMessageDialog(frame, ex.getMessage(), "Użytkownicy", JOptionPane.ERROR_MESSAGE);
+            showStyledMessageDialog(frame, ex.getMessage(), "Użytkownicy", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -1048,14 +1068,14 @@ public class CampusReserveGui
     {
         if (loggedInUser == null || loggedInUser.getRole() != Role.ADMIN)
         {
-            JOptionPane.showMessageDialog(frame, "Tylko administrator ma dostęp do tej funkcji.", "Użytkownicy", JOptionPane.WARNING_MESSAGE);
+            showStyledMessageDialog(frame, "Tylko administrator ma dostęp do tej funkcji.", "Użytkownicy", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         User selected = userList.getSelectedValue();
         if (selected == null)
         {
-            JOptionPane.showMessageDialog(frame, "Wybierz użytkownika z listy.", "Użytkownicy", JOptionPane.WARNING_MESSAGE);
+            showStyledMessageDialog(frame, "Wybierz użytkownika z listy.", "Użytkownicy", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -1064,17 +1084,79 @@ public class CampusReserveGui
             userManager.activateUser(selected.getUserId());
             persistUsers();
             refreshUsers();
-            JOptionPane.showMessageDialog(frame, "Użytkownik został aktywowany.", "Użytkownicy", JOptionPane.INFORMATION_MESSAGE);
+            showStyledMessageDialog(frame, "Użytkownik został aktywowany.", "Użytkownicy", JOptionPane.INFORMATION_MESSAGE);
         }
         catch (IllegalArgumentException ex)
         {
-            JOptionPane.showMessageDialog(frame, ex.getMessage(), "Użytkownicy", JOptionPane.ERROR_MESSAGE);
+            showStyledMessageDialog(frame, ex.getMessage(), "Użytkownicy", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void persistUsers()
     {
         dataManager.saveUsers(userManager.getAllUsers());
+    }
+
+    private void showStyledMessageDialog(Component parent, String message, String title, int messageType)
+    {
+        JDialog dialog = new JDialog(frame, title, true);
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+        JPanel content = new JPanel(new BorderLayout(16, 16));
+        content.setBackground(themeCard());
+        content.setBorder(new EmptyBorder(18, 18, 18, 18));
+
+        JPanel messagePanel = new JPanel(new BorderLayout(14, 0));
+        messagePanel.setOpaque(false);
+
+        JLabel iconLabel = new JLabel();
+        if (messageType == JOptionPane.ERROR_MESSAGE)
+        {
+            iconLabel.setIcon(UIManager.getIcon("OptionPane.errorIcon"));
+        }
+        else if (messageType == JOptionPane.WARNING_MESSAGE)
+        {
+            iconLabel.setIcon(UIManager.getIcon("OptionPane.warningIcon"));
+        }
+        else if (messageType == JOptionPane.INFORMATION_MESSAGE)
+        {
+            iconLabel.setIcon(UIManager.getIcon("OptionPane.informationIcon"));
+        }
+        else
+        {
+            iconLabel.setIcon(UIManager.getIcon("OptionPane.questionIcon"));
+        }
+        messagePanel.add(iconLabel, BorderLayout.WEST);
+
+        JTextArea messageArea = new JTextArea(message);
+        messageArea.setEditable(false);
+        messageArea.setOpaque(false);
+        messageArea.setLineWrap(true);
+        messageArea.setWrapStyleWord(true);
+        messageArea.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        messageArea.setForeground(themeText());
+        messageArea.setColumns(30);
+        messageArea.setRows(3);
+        messageArea.setBorder(new EmptyBorder(4, 0, 4, 0));
+        messagePanel.add(messageArea, BorderLayout.CENTER);
+
+        content.add(messagePanel, BorderLayout.CENTER);
+
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        buttons.setOpaque(false);
+        JButton okButton = new JButton("OK");
+        stylePrimaryButton(okButton);
+        bindAction(okButton, dialog::dispose);
+        dialog.getRootPane().setDefaultButton(okButton);
+        buttons.add(okButton);
+        content.add(buttons, BorderLayout.SOUTH);
+
+        dialog.setContentPane(content);
+        dialog.pack();
+        dialog.setSize(Math.max(dialog.getWidth(), 430), dialog.getHeight());
+        dialog.setResizable(false);
+        dialog.setLocationRelativeTo(parent != null ? parent : frame);
+        dialog.setVisible(true);
     }
 
     private void exitApplication()

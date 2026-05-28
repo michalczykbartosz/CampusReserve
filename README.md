@@ -11,6 +11,15 @@ mvn -DskipTests compile
 java -cp target/classes campusreserve.Main
 ```
 
+### GUI gdy mvn nie działa
+```powershell
+Set-Location 'C:\Users\bart3\Desktop\JAVA\CampusReserve'
+New-Item -ItemType Directory -Force -Path 'out' | Out-Null
+$files = Get-ChildItem -Path 'src\main\java' -Recurse -Filter '*.java' | ForEach-Object { $_.FullName }
+javac -d out $files
+java -cp out campusreserve.Main
+```
+
 ### Tryb konsolowy
 ```powershell
 java -cp target/classes campusreserve.Main --console
