@@ -44,14 +44,20 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 public class CampusReserveGui
@@ -72,6 +78,8 @@ public class CampusReserveGui
     private static final Color DARK_ACCENT = new Color(82, 140, 198);
     private static final Color DARK_ACCENT_DARK = new Color(44, 78, 117);
     private static final Color DARK_ACCENT_LIGHT = new Color(112, 170, 228);
+    private static final Path SETTINGS_FILE = Path.of(System.getProperty("user.home"), ".campusreserve-ui.properties");
+    private static final String DARK_MODE_KEY = "darkMode";
 
     private final ResourceManager resourceManager;
     private final Schedule schedule;
@@ -113,6 +121,7 @@ public class CampusReserveGui
         this.schedule = schedule;
         this.userManager = userManager;
         this.dataManager = dataManager;
+        loadThemePreference();
     }
 
     public void show()
@@ -337,6 +346,7 @@ public class CampusReserveGui
         gc.gridy++;
         gc.gridwidth = 2;
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 0));
+        styleButtonStrip(buttons);
         JButton loginButton = new JButton("Zaloguj się");
         bindAction(loginButton, this::attemptLogin);
         stylePrimaryButton(loginButton);
@@ -383,6 +393,7 @@ public class CampusReserveGui
         darkToggle.setFocusPainted(false);
         darkToggle.addActionListener(e -> {
             darkMode = darkToggle.isSelected();
+            saveThemePreference();
             try { frame.dispose(); } catch (Exception ignored) {}
             javax.swing.SwingUtilities.invokeLater(this::show);
         });
@@ -560,6 +571,7 @@ public class CampusReserveGui
         gc.gridy++;
         gc.gridwidth = 2;
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        styleButtonStrip(buttons);
         JButton reserveButton = new JButton("Zarezerwuj");
         bindAction(reserveButton, this::createReservation);
         stylePrimaryButton(reserveButton);
@@ -602,7 +614,7 @@ public class CampusReserveGui
         userList.setCellRenderer(new UserRenderer());
 
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        top.setOpaque(false);
+        styleButtonStrip(top);
         JButton refreshButton = new JButton("Odśwież użytkowników");
         bindAction(refreshButton, this::refreshUsers);
         styleSecondaryButton(refreshButton);
@@ -1074,8 +1086,43 @@ public class CampusReserveGui
         catch (Exception ignored)
         {
         }
+        saveThemePreference();
         frame.dispose();
         System.exit(0);
+    }
+
+    private void loadThemePreference()
+    {
+        Properties properties = new Properties();
+        if (!Files.exists(SETTINGS_FILE))
+        {
+            darkMode = false;
+            return;
+        }
+
+        try (InputStream inputStream = Files.newInputStream(SETTINGS_FILE))
+        {
+            properties.load(inputStream);
+            darkMode = Boolean.parseBoolean(properties.getProperty(DARK_MODE_KEY, "false"));
+        }
+        catch (IOException ignored)
+        {
+            darkMode = false;
+        }
+    }
+
+    private void saveThemePreference()
+    {
+        Properties properties = new Properties();
+        properties.setProperty(DARK_MODE_KEY, Boolean.toString(darkMode));
+
+        try (OutputStream outputStream = Files.newOutputStream(SETTINGS_FILE))
+        {
+            properties.store(outputStream, "CampusReserve UI settings");
+        }
+        catch (IOException ignored)
+        {
+        }
     }
 
     private void addFormRow(JPanel panel, GridBagConstraints gc, String labelText, JComponent component)
@@ -1115,6 +1162,13 @@ public class CampusReserveGui
         panel.add(component, right);
 
         gc.gridy = currentY + 1;
+    }
+
+    private void styleButtonStrip(JPanel panel)
+    {
+        panel.setBackground(themeCard());
+        panel.setOpaque(true);
+        panel.setBorder(new EmptyBorder(0, 0, 0, 0));
     }
 
     private void bindAction(JButton button, Runnable action)
